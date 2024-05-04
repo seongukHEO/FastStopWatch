@@ -16,6 +16,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
 
     private var countDownSecond = 10
+    private var currentCountDownDeciSecond = countDownSecond * 10
     private var currentDeciSecond = 0
     private var timer : Timer? = null
 
@@ -67,22 +68,37 @@ class MainActivity : AppCompatActivity() {
     //시작 버튼을 눌렀을 때
     private fun putStart() {
         timer = timer(initialDelay = 0, period = 100) {
-            currentDeciSecond += 1
 
-            val minutes = currentDeciSecond.div(10) / 60
-            val second = currentDeciSecond.div(10) % 60
-            val deciSecond = currentDeciSecond % 10
+            if (currentCountDownDeciSecond == 0){
+                currentDeciSecond += 1
 
-            runOnUiThread {
-                binding.textTimeView.text = String.format("%02d:%02d", minutes, second)
-                binding.textviewTic.text = deciSecond.toString()
+                val minutes = currentDeciSecond.div(10) / 60
+                val second = currentDeciSecond.div(10) % 60
+                val deciSecond = currentDeciSecond % 10
+
+                runOnUiThread {
+                    binding.textTimeView.text = String.format("%02d:%02d", minutes, second)
+                    binding.textviewTic.text = deciSecond.toString()
+                }
+            }else{
+                currentCountDownDeciSecond -= 1
+                val seconds = currentCountDownDeciSecond/10
+                val progress = (currentCountDownDeciSecond/(countDownSecond * 10f )) * 100
+
+                binding.root.post {
+                    binding.textviewCountDown.text = String.format("%02d", seconds)
+                    binding.countDownProgressBar.progress = progress.toInt()
+                }
+
             }
         }
     }
 
     //종료 버튼을 눌렀을 때
     private fun putStop() {
-
+        currentDeciSecond = 0
+        binding.textTimeView.text = "00:00"
+        binding.textviewTic.text = "0"
     }
 
     //일시정지
@@ -109,6 +125,7 @@ class MainActivity : AppCompatActivity() {
             }
             setPositiveButton("확인") { _, _ ->
                 countDownSecond = dialogBinding.countDownSecondPicker.value
+                currentCountDownDeciSecond = countDownSecond * 10
                 binding.textviewCountDown.text = String.format("%02d", countDownSecond)
             }
             setNegativeButton("취소", null)
@@ -124,6 +141,6 @@ class MainActivity : AppCompatActivity() {
                 putStop()
             }
             setNegativeButton("취소", null)
-        }
+        }.show()
     }
 }

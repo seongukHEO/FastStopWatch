@@ -1,8 +1,12 @@
 package kr.co.seonguk.application.faststopwatch
 
 import android.app.AlertDialog
+import android.media.AudioManager
+import android.media.ToneGenerator
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.Gravity
+import android.widget.TextView
 import androidx.core.view.isVisible
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import kr.co.seonguk.application.faststopwatch.databinding.ActivityMainBinding
@@ -18,7 +22,7 @@ class MainActivity : AppCompatActivity() {
     private var countDownSecond = 10
     private var currentCountDownDeciSecond = countDownSecond * 10
     private var currentDeciSecond = 0
-    private var timer : Timer? = null
+    private var timer: Timer? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -69,7 +73,7 @@ class MainActivity : AppCompatActivity() {
     private fun putStart() {
         timer = timer(initialDelay = 0, period = 100) {
 
-            if (currentCountDownDeciSecond == 0){
+            if (currentCountDownDeciSecond == 0) {
                 currentDeciSecond += 1
 
                 val minutes = currentDeciSecond.div(10) / 60
@@ -79,17 +83,24 @@ class MainActivity : AppCompatActivity() {
                 runOnUiThread {
                     binding.textTimeView.text = String.format("%02d:%02d", minutes, second)
                     binding.textviewTic.text = deciSecond.toString()
+
+                    binding.groupTop.isVisible = false
                 }
-            }else{
+            } else {
                 currentCountDownDeciSecond -= 1
-                val seconds = currentCountDownDeciSecond/10
-                val progress = (currentCountDownDeciSecond/(countDownSecond * 10f )) * 100
+                val seconds = currentCountDownDeciSecond / 10
+                val progress = (currentCountDownDeciSecond / (countDownSecond * 10f)) * 100
 
                 binding.root.post {
                     binding.textviewCountDown.text = String.format("%02d", seconds)
                     binding.countDownProgressBar.progress = progress.toInt()
                 }
 
+            }
+            if (currentDeciSecond == 0 && currentCountDownDeciSecond < 31 && currentCountDownDeciSecond % 10 == 0){
+                val toneType = if (currentCountDownDeciSecond == 0) ToneGenerator.TONE_CDMA_HIGH_L else ToneGenerator.TONE_CDMA_ANSWER
+                ToneGenerator(AudioManager.STREAM_ALARM, ToneGenerator.MAX_VOLUME)
+                    .startTone(toneType, 500)
             }
         }
     }
@@ -99,6 +110,7 @@ class MainActivity : AppCompatActivity() {
         currentDeciSecond = 0
         binding.textTimeView.text = "00:00"
         binding.textviewTic.text = "0"
+        binding.lapContainerLinear.removeAllViews()
     }
 
     //일시정지
@@ -110,6 +122,22 @@ class MainActivity : AppCompatActivity() {
     //기록
     private fun putLab() {
 
+        if (currentDeciSecond == 0) return
+
+        val container = binding.lapContainerLinear
+        TextView(this).apply {
+            textSize = 20f
+            gravity = Gravity.CENTER
+            val minutes = currentDeciSecond.div(10) / 60
+            val seconds = currentDeciSecond.div(10) % 60
+            val deciSecond = currentDeciSecond % 10
+            text = "${container.childCount.inc()}. " + String.format(
+                "%02d:%02d %01d", minutes, seconds, deciSecond
+            )
+            setPadding(30, 30, 30, 30)
+        }.let {
+            container.addView(it, 0)
+        }
     }
 
 

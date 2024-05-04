@@ -85,8 +85,8 @@
         android:id="@+id/buttonStart"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:clickable="true"
         android:backgroundTint="@color/green"
+        android:clickable="true"
         app:layout_constraintBottom_toTopOf="@id/guideline2"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.7"
@@ -100,50 +100,70 @@
         android:id="@+id/buttonPause"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:clickable="true"
         android:backgroundTint="@color/yellow"
-        app:srcCompat="@drawable/baseline_pause_24"
-        app:layout_constraintHorizontal_bias="0.7"
+        android:clickable="true"
+        android:visibility="gone"
         app:layout_constraintBottom_toTopOf="@id/guideline2"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.7"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@id/guideline2"
-        tools:ignore="MissingConstraints"
-        android:visibility="gone"/>
-
+        app:srcCompat="@drawable/baseline_pause_24"
+        tools:ignore="MissingConstraints" />
 
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/buttonStop"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:clickable="true"
         android:backgroundTint="@color/red"
-        app:srcCompat="@drawable/baseline_stop_24"
-        app:layout_constraintHorizontal_bias="0.3"
+        android:clickable="true"
+        android:visibility="visible"
         app:layout_constraintBottom_toTopOf="@id/guideline2"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.3"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@id/guideline2"
-        tools:ignore="MissingConstraints"
-        android:visibility="visible"/>
-
+        app:srcCompat="@drawable/baseline_stop_24"
+        tools:ignore="MissingConstraints" />
 
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/buttonLab"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:clickable="true"
         android:backgroundTint="@color/blue"
-        app:srcCompat="@drawable/baseline_check_24"
-        app:layout_constraintHorizontal_bias="0.3"
+        android:clickable="true"
+        android:visibility="gone"
         app:layout_constraintBottom_toTopOf="@id/guideline2"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.3"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@id/guideline2"
-        tools:ignore="MissingConstraints"
-        android:visibility="gone"/>
+        app:srcCompat="@drawable/baseline_check_24"
+        tools:ignore="MissingConstraints" />
+
+    <androidx.constraintlayout.widget.Group
+        android:id="@+id/groupTop"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:constraint_referenced_ids="countDownProgressBar,textviewCountDown,countTimeTitleText,textViewCountUnit" />
+
+    <ScrollView
+        android:layout_width="409dp"
+        android:layout_height="262dp"
+        android:layout_marginTop="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/buttonStart">
+
+        <LinearLayout
+            android:id="@+id/lapContainerLinear"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="20dp" />
+    </ScrollView>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
